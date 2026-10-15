@@ -28,4 +28,15 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
+
+    @ExceptionHandler(EmailAlreadyUsedException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailAlreadyUsed(
+            EmailAlreadyUsedException ex
+    ) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "EMAIL_ALREADY_USED");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
 }
