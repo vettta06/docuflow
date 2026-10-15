@@ -21,3 +21,7 @@ spring:
 
 server:
   port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:change_me_please_this_is_not_secure_use_env_var_in_production_minimum_32_chars}
+  expiration-ms: 3600000
