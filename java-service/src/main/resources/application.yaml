@@ -25,3 +25,9 @@ server:
 jwt:
   secret: ${JWT_SECRET:change_me_please_this_is_not_secure_use_env_var_in_production_minimum_32_chars}
   expiration-ms: 3600000
+
+bootstrap:
+  manager:
+    email: ${BOOTSTRAP_MANAGER_EMAIL:manager@platform.local}
+    password: ${BOOTSTRAP_MANAGER_PASSWORD:admin12345}
+    full-name: ${BOOTSTRAP_MANAGER_FULL_NAME:Platform Manager}
