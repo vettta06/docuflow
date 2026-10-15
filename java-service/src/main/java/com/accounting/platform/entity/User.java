@@ -39,6 +39,9 @@ public class User {
     @Column(length = 20)
     private String phone;
 
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
     private Organization organization;
