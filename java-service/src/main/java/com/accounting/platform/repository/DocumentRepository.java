@@ -11,4 +11,5 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findByOrganizationId(Long organizationId);
     List<Document> findByStatus(DocumentStatus status);
     List<Document> findByDocumentType(DocumentType documentType);
+    List<Document> findByOrganizationIdIn(List<Long> organizationIds);
 }

@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -118,5 +119,85 @@ public class DocumentService {
             case MANAGER -> {
             }
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<DocumentResponse> list() {
+        CustomUserDetails current = SecurityUtils.requireCurrentUser();
+
+        List<Document> documents = switch (current.getRole()) {
+            case CLIENT -> {
+                User user = userRepository.findById(current.getId())
+                        .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+                if (user.getOrganization() == null) {
+                    yield List.of();
+                }
+                yield documentRepository.findByOrganizationId(user.getOrganization().getId());
+            }
+            case ACCOUNTANT -> {
+                List<Long> orgIds = accountantClientRepository.findByAccountantId(current.getId())
+                        .stream()
+                        .map(ac -> ac.getOrganization().getId())
+                        .toList();
+                yield orgIds.isEmpty()
+                        ? List.of()
+                        : documentRepository.findByOrganizationIdIn(orgIds);
+            }
+            case MANAGER -> documentRepository.findAll();
+        };
+
+        return documents.stream()
+                .map(doc -> DocumentResponse.from(doc, findOperationId(doc)))
+                .toList();
+    }
+
+    private Long findOperationId(Document doc) {
+        return operationDocumentRepository.findByDocumentId(doc.getId())
+                .stream()
+                .findFirst()
+                .map(od -> od.getOperation().getId())
+                .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public DocumentResponse getById(Long id) {
+        Document doc = documentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Документ с id " + id + " не найден"));
+
+        checkAccessToOrganization(doc.getOrganization().getId());
+        return DocumentResponse.from(doc, findOperationId(doc));
+    }
+
+    private void checkAccessToOrganization(Long orgId) {
+        CustomUserDetails current = SecurityUtils.requireCurrentUser();
+
+        switch (current.getRole()) {
+            case CLIENT -> {
+                User user = userRepository.findById(current.getId())
+                        .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+                if (user.getOrganization() == null
+                        || !user.getOrganization().getId().equals(orgId)) {
+                    throw new NotFoundException("Документ не найден");
+                }
+            }
+            case ACCOUNTANT -> {
+                boolean assigned = accountantClientRepository.findByAccountantId(current.getId())
+                        .stream()
+                        .anyMatch(ac -> ac.getOrganization().getId().equals(orgId));
+                if (!assigned) {
+                    throw new NotFoundException("Документ не найден");
+                }
+            }
+            case MANAGER -> {
+            }
+        }
+    }
+    @Transactional(readOnly = true)
+    public Resource download(Long id) {
+        Document doc = documentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Документ с id " + id + " не найден"));
+
+        checkAccessToOrganization(doc.getOrganization().getId());
+        return fileStorageService.load(doc.getFilePath());
     }
 }
