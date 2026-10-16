@@ -71,6 +71,45 @@ public class OperationService {
         return toResponse(saved);
     }
 
+    @Transactional(readOnly = true)
+    public List<OperationResponse> list() {
+        CustomUserDetails current = SecurityUtils.requireCurrentUser();
+
+        List<Operation> operations = switch (current.getRole()) {
+            case CLIENT -> {
+                User user = userRepository.findById(current.getId())
+                        .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+                if (user.getOrganization() == null) {
+                    yield List.of();
+                }
+                yield operationRepository.findByOrganizationId(user.getOrganization().getId());
+            }
+            case ACCOUNTANT -> {
+                List<Long> orgIds = accountantClientRepository.findByAccountantId(current.getId())
+                        .stream()
+                        .map(ac -> ac.getOrganization().getId())
+                        .toList();
+                yield orgIds.isEmpty()
+                        ? List.of()
+                        : operationRepository.findByOrganizationIdIn(orgIds);
+            }
+            case MANAGER -> operationRepository.findAll();
+        };
+
+        return operations.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public OperationResponse getById(Long id) {
+        Operation op = operationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Операция с id " + id + " не найдена"));
+
+        checkAccess(op);
+        return toResponse(op);
+    }
+
     private Organization resolveOrganization(CustomUserDetails current, Long requestedOrgId) {
         return switch (current.getRole()) {
             case CLIENT -> {
@@ -141,5 +180,30 @@ public class OperationService {
             ));
         }
         return result;
+    }
+
+    private void checkAccess(Operation op) {
+        CustomUserDetails current = SecurityUtils.requireCurrentUser();
+        Long orgId = op.getOrganization().getId();
+
+        switch (current.getRole()) {
+            case CLIENT -> {
+                User user = userRepository.findById(current.getId())
+                        .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+                if (user.getOrganization() == null || !user.getOrganization().getId().equals(orgId)) {
+                    throw new NotFoundException("Операция с id " + op.getId() + " не найдена");
+                }
+            }
+            case ACCOUNTANT -> {
+                boolean assigned = accountantClientRepository.findByAccountantId(current.getId())
+                        .stream()
+                        .anyMatch(ac -> ac.getOrganization().getId().equals(orgId));
+                if (!assigned) {
+                    throw new NotFoundException("Операция с id " + op.getId() + " не найдена");
+                }
+            }
+            case MANAGER -> {
+            }
+        }
     }
 }

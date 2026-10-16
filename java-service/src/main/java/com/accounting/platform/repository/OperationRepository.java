@@ -10,4 +10,5 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
     List<Operation> findByOrganizationId(Long organizationId);
     List<Operation> findByAccountantId(Long accountantId);
     List<Operation> findByStatus(OperationStatus status);
+    List<Operation> findByOrganizationIdIn(List<Long> organizationIds);
 }
