@@ -93,3 +93,6 @@ pnpm-debug.log*
 # DB dumps
 *.dump
 dumps/
+
+# Uploaded files
+uploads/
