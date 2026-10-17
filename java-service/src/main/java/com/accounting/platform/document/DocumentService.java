@@ -11,6 +11,7 @@ import com.accounting.platform.entity.Operation;
 import com.accounting.platform.entity.OperationDocument;
 import com.accounting.platform.entity.User;
 import com.accounting.platform.repository.AccountantClientRepository;
+import com.accounting.platform.repository.CommentRepository;
 import com.accounting.platform.repository.DocumentRepository;
 import com.accounting.platform.repository.OperationDocumentRepository;
 import com.accounting.platform.repository.OperationRepository;
@@ -18,7 +19,13 @@ import com.accounting.platform.repository.UserRepository;
 import com.accounting.platform.security.CustomUserDetails;
 import com.accounting.platform.security.SecurityUtils;
 import com.accounting.platform.storage.FileStorageService;
+import com.accounting.platform.document.dto.ChangeDocumentStatusRequest;
+import com.accounting.platform.entity.Comment;
+import com.accounting.platform.entity.UserRole;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +33,8 @@ import org.springframework.core.io.Resource;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +46,13 @@ public class DocumentService {
     private final UserRepository userRepository;
     private final AccountantClientRepository accountantClientRepository;
     private final FileStorageService fileStorageService;
+    private final CommentRepository commentRepository;
+
+    private static final Map<DocumentStatus, Set<DocumentStatus>> ALLOWED_TRANSITIONS = Map.of(
+        DocumentStatus.UPLOADED, Set.of(DocumentStatus.NEEDS_REVIEW, DocumentStatus.CONFIRMED, DocumentStatus.REJECTED),
+        DocumentStatus.NEEDS_REVIEW, Set.of(DocumentStatus.UPLOADED, DocumentStatus.CONFIRMED, DocumentStatus.REJECTED),
+        DocumentStatus.REJECTED, Set.of(DocumentStatus.UPLOADED)
+    );
 
     @Transactional
     public DocumentResponse upload(MultipartFile file, Long operationId, String documentTypeStr) {
@@ -199,5 +215,52 @@ public class DocumentService {
 
         checkAccessToOrganization(doc.getOrganization().getId());
         return fileStorageService.load(doc.getFilePath());
+    }
+
+    @Transactional
+    public DocumentResponse changeStatus(Long id, ChangeDocumentStatusRequest request) {
+        Document doc = documentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Документ с id " + id + " не найден"));
+
+        CustomUserDetails current = SecurityUtils.requireCurrentUser();
+
+        if (current.getRole() == UserRole.CLIENT) {
+            throw new InvalidOperationException("Клиент не может менять статус документа");
+        }
+        
+        checkAccessToOrganization(doc.getOrganization().getId());
+
+        DocumentStatus newStatus;
+        try {
+            newStatus = DocumentStatus.valueOf(request.status().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidOperationException("Недопустимый статус: " + request.status());
+        }
+
+        Set<DocumentStatus> allowedNext = ALLOWED_TRANSITIONS.getOrDefault(doc.getStatus(), Set.of());
+        if (!allowedNext.contains(newStatus)) {
+            throw new IllegalStateException("Недопустимый переход из " + doc.getStatus() + " в " + newStatus);
+        }
+
+        if ((newStatus == DocumentStatus.NEEDS_REVIEW || newStatus == DocumentStatus.REJECTED) 
+                && (request.comment() == null || request.comment().isBlank())) {
+            throw new InvalidOperationException("Для статуса " + newStatus + " обязателен комментарий");
+        }
+
+        if (request.comment() != null && !request.comment().isBlank()) {
+            Comment comment = new Comment();
+            comment.setAuthor(userRepository.findById(current.getId())
+                    .orElseThrow(() -> new NotFoundException("Пользователь не найден")));
+            comment.setDocument(doc);
+            comment.setText(request.comment());
+            comment.setCreatedAt(LocalDateTime.now());
+            commentRepository.save(comment);
+        }
+
+        doc.setStatus(newStatus);
+        doc.setUpdatedAt(LocalDateTime.now());
+        documentRepository.save(doc);
+
+        return DocumentResponse.from(doc, findOperationId(doc));
     }
 }

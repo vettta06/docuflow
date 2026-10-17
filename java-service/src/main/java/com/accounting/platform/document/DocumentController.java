@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.accounting.platform.document.dto.ChangeDocumentStatusRequest;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -58,5 +62,13 @@ public class DocumentController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + meta.fileName() + "\"")
                 .body(resource);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<DocumentResponse> changeStatus(
+        @PathVariable Long id,
+        @Valid @RequestBody ChangeDocumentStatusRequest request
+    ) {
+        return ResponseEntity.ok(documentService.changeStatus(id, request));
     }
 }
