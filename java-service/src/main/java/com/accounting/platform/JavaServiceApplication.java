@@ -2,6 +2,7 @@ package com.accounting.platform;
 
 import com.accounting.platform.config.BootstrapProperties;
 import com.accounting.platform.config.JwtProperties;
+import com.accounting.platform.config.MinioProperties;
 import com.accounting.platform.config.StorageProperties;
 
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({JwtProperties.class, BootstrapProperties.class, StorageProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, BootstrapProperties.class, StorageProperties.class, MinioProperties.class})
 public class JavaServiceApplication {
 
     public static void main(String[] args) {
