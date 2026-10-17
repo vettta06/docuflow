@@ -1,19 +1,24 @@
 package com.accounting.platform.storage;
 
 import com.accounting.platform.common.InvalidOperationException;
+import com.accounting.platform.config.MinioProperties;
 import com.accounting.platform.config.StorageProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -21,55 +26,58 @@ import java.util.UUID;
 @Slf4j
 public class FileStorageService {
 
+    private final S3Client s3Client;
+    private final MinioProperties minioProperties;
     private final StorageProperties storageProperties;
 
     public String store(MultipartFile file) {
         validateFile(file);
 
+        String originalName = file.getOriginalFilename();
+        String extension = extractExtension(originalName);
+        String storedName = UUID.randomUUID() + extension;
+
         try {
-            Path uploadPath = Paths.get(storageProperties.uploadDir()).toAbsolutePath().normalize();
-            Files.createDirectories(uploadPath);
+            PutObjectRequest putRequest = PutObjectRequest.builder()
+                    .bucket(minioProperties.bucket())
+                    .key(storedName)
+                    .contentType(file.getContentType())
+                    .build();
 
-            String originalName = file.getOriginalFilename();
-            String extension = extractExtension(originalName);
-            String storedName = UUID.randomUUID() + extension;
-
-            Path target = uploadPath.resolve(storedName);
-            Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
-
-            log.info("Файл сохранён: {} ({} bytes)", storedName, file.getSize());
+            s3Client.putObject(putRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            log.info("Файл сохранен в MinIO: {} ({} bytes)", storedName, file.getSize());
             return storedName;
         } catch (IOException ex) {
-            throw new InvalidOperationException("Не удалось сохранить файл: " + ex.getMessage());
+            throw new InvalidOperationException("Не удалось сохранить файл в MinIO: " + ex.getMessage());
         }
     }
 
     public Resource load(String storedName) {
         try {
-            Path uploadPath = Paths.get(storageProperties.uploadDir()).toAbsolutePath().normalize();
-            Path filePath = uploadPath.resolve(storedName).normalize();
+            GetObjectRequest getRequest = GetObjectRequest.builder()
+                    .bucket(minioProperties.bucket())
+                    .key(storedName)
+                    .build();
 
-            if (!filePath.startsWith(uploadPath)) {
-                throw new InvalidOperationException("Некорректный путь к файлу");
-            }
-
-            Resource resource = new UrlResource(filePath.toUri());
-            if (!resource.exists() || !resource.isReadable()) {
-                throw new InvalidOperationException("Файл не найден или недоступен для чтения");
-            }
-            return resource;
-        } catch (IOException ex) {
-            throw new InvalidOperationException("Не удалось прочитать файл: " + ex.getMessage());
+            ResponseInputStream<GetObjectResponse> s3Object = s3Client.getObject(getRequest);
+            return new InputStreamResource(s3Object);
+        } catch (NoSuchKeyException ex) {
+            throw new InvalidOperationException("Файл не найден в хранилище");
+        } catch (Exception ex) {
+            throw new InvalidOperationException("Не удалось прочитать файл из MinIO: " + ex.getMessage());
         }
     }
 
     public void delete(String storedName) {
         try {
-            Path uploadPath = Paths.get(storageProperties.uploadDir()).toAbsolutePath().normalize();
-            Path filePath = uploadPath.resolve(storedName).normalize();
-            Files.deleteIfExists(filePath);
-        } catch (IOException ex) {
-            log.warn("Не удалось удалить файл {}: {}", storedName, ex.getMessage());
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(minioProperties.bucket())
+                    .key(storedName)
+                    .build();
+            s3Client.deleteObject(deleteRequest);
+            log.info("Файл удален из MinIO: {}", storedName);
+        } catch (Exception ex) {
+            log.warn("Не удалось удалить файл {} из MinIO: {}", storedName, ex.getMessage());
         }
     }
 
