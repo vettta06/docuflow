@@ -52,6 +52,7 @@ public class DocumentService {
     private final FileStorageService fileStorageService;
     private final CommentRepository commentRepository;
     private final DocumentProcessorClient documentProcessorClient;
+    private final com.accounting.platform.repository.DocumentDataRepository documentDataRepository;
 
     private static final Map<DocumentStatus, Set<DocumentStatus>> ALLOWED_TRANSITIONS = Map.of(
         DocumentStatus.UPLOADED, Set.of(DocumentStatus.NEEDS_REVIEW, DocumentStatus.CONFIRMED, DocumentStatus.REJECTED),
@@ -103,8 +104,24 @@ public class DocumentService {
                     saved.getId()
                 );
                 log.info("Python-сервис ответил: success={}, type={}, number={}, amount={}",
-                        ocrResult.getSuccess(), ocrResult.getDocumentType(),
-                        ocrResult.getNumber(), ocrResult.getAmount());
+                    ocrResult.getSuccess(), ocrResult.getDocumentType(),
+                    ocrResult.getNumber(), ocrResult.getAmount());
+
+                if (ocrResult.getSuccess()) {
+                    com.accounting.platform.entity.DocumentData data = new com.accounting.platform.entity.DocumentData();
+                    data.setDocument(saved);
+                    data.setNumber(ocrResult.getNumber().isEmpty() ? null : ocrResult.getNumber());
+                    if (!ocrResult.getDate().isEmpty()) {
+                        try { data.setDate(java.time.LocalDate.parse(ocrResult.getDate())); } catch (Exception ignored) {}
+                    }
+                    data.setSellerInn(ocrResult.getInn().isEmpty() ? null : ocrResult.getInn());
+                    data.setAmount(java.math.BigDecimal.valueOf(ocrResult.getAmount()));
+                    data.setCreatedAt(java.time.LocalDateTime.now());
+                    
+                    documentDataRepository.save(data);
+                    log.info("Данные из Python сохранены в document_data для документа {}", saved.getId());
+                }
+
             } catch (Exception e) {
                 log.error("Не удалось получить данные от Python-сервиса, но документ сохранен.", e);
             }
