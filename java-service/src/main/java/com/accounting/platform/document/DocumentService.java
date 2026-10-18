@@ -22,7 +22,10 @@ import com.accounting.platform.storage.FileStorageService;
 import com.accounting.platform.document.dto.ChangeDocumentStatusRequest;
 import com.accounting.platform.entity.Comment;
 import com.accounting.platform.entity.UserRole;
+import com.accounting.platform.grpc.ProcessResponse;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +41,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
@@ -47,6 +51,7 @@ public class DocumentService {
     private final AccountantClientRepository accountantClientRepository;
     private final FileStorageService fileStorageService;
     private final CommentRepository commentRepository;
+    private final DocumentProcessorClient documentProcessorClient;
 
     private static final Map<DocumentStatus, Set<DocumentStatus>> ALLOWED_TRANSITIONS = Map.of(
         DocumentStatus.UPLOADED, Set.of(DocumentStatus.NEEDS_REVIEW, DocumentStatus.CONFIRMED, DocumentStatus.REJECTED),
@@ -89,6 +94,20 @@ public class DocumentService {
             link.setDocument(saved);
             link.setAddedAt(LocalDateTime.now());
             operationDocumentRepository.save(link);
+
+            try {
+                ProcessResponse ocrResult = documentProcessorClient.processDocument(
+                    file.getBytes(),
+                    file.getOriginalFilename(),
+                    documentType.name(),
+                    saved.getId()
+                );
+                log.info("Python-сервис ответил: success={}, type={}, number={}, amount={}",
+                        ocrResult.getSuccess(), ocrResult.getDocumentType(),
+                        ocrResult.getNumber(), ocrResult.getAmount());
+            } catch (Exception e) {
+                log.error("Не удалось получить данные от Python-сервиса, но документ сохранен.", e);
+            }
 
             return DocumentResponse.from(saved, operation.getId());
 

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.accounting.platform.grpc";
+option java_outer_classname = "DocumentProcessorProto";
+
+package document;
+
+service DocumentProcessor {
+  rpc ProcessDocument (ProcessRequest) returns (ProcessResponse);
+}
+
+message ProcessRequest {
+  int64 document_id = 1;
+  string file_name = 2;
+  bytes file_content = 3; 
+  string document_type_hint = 4; 
+}
+
+message ProcessResponse {
+  bool success = 1;
+  string document_type = 2;
+  string number = 3;
+  string date = 4; 
+  string inn = 5;
+  double amount = 6;
+  repeated string errors = 7; 
+}
