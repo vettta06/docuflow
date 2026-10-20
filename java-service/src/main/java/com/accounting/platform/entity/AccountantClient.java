@@ -10,35 +10,33 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
     name = "accountant_clients",
-    uniqueConstraints = @UniqueConstraint(
-        name = "uq_accountant_org",
-        columnNames = {"accountant_id", "organization_id"}
-    )
-)
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uq_accountant_org",
+            columnNames = {"accountant_id", "organization_id"}))
 @Getter
 @Setter
 public class AccountantClient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "accountant_id", nullable = false)
-    private User accountant;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "accountant_id", nullable = false)
+  private User accountant;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "organization_id", nullable = false)
-    private Organization organization;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "organization_id", nullable = false)
+  private Organization organization;
 
-    @Column(name = "assigned_at", nullable = false)
-    private LocalDateTime assignedAt;
+  @Column(name = "assigned_at", nullable = false)
+  private LocalDateTime assignedAt;
 }

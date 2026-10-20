@@ -9,10 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "audit_log")
@@ -20,29 +19,29 @@ import java.time.LocalDateTime;
 @Setter
 public class AuditLog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @Column(name = "entity_type", nullable = false, length = 50)
-    private String entityType;
+  @Column(name = "entity_type", nullable = false, length = 50)
+  private String entityType;
 
-    @Column(name = "entity_id", nullable = false)
-    private Long entityId;
+  @Column(name = "entity_id", nullable = false)
+  private Long entityId;
 
-    @Column(nullable = false, length = 50)
-    private String action;
+  @Column(nullable = false, length = 50)
+  private String action;
 
-    @Column(name = "old_value", columnDefinition = "text")
-    private String oldValue;
+  @Column(name = "old_value", columnDefinition = "text")
+  private String oldValue;
 
-    @Column(name = "new_value", columnDefinition = "text")
-    private String newValue;
+  @Column(name = "new_value", columnDefinition = "text")
+  private String newValue;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+  @Column(name = "created_at", nullable = false)
+  private LocalDateTime createdAt;
 }

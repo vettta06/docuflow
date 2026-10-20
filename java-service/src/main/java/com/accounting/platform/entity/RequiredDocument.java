@@ -16,26 +16,25 @@ import lombok.Setter;
 @Entity
 @Table(
     name = "required_documents",
-    uniqueConstraints = @UniqueConstraint(
-        name = "uq_required_doc",
-        columnNames = {"operation_type_id", "document_type"}
-    )
-)
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uq_required_doc",
+            columnNames = {"operation_type_id", "document_type"}))
 @Getter
 @Setter
 public class RequiredDocument {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "operation_type_id", nullable = false)
-    private OperationType operationType;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "operation_type_id", nullable = false)
+  private OperationType operationType;
 
-    @Column(name = "document_type", nullable = false, length = 50)
-    private String documentType;
+  @Column(name = "document_type", nullable = false, length = 50)
+  private String documentType;
 
-    @Column(name = "is_mandatory", nullable = false)
-    private Boolean isMandatory;
+  @Column(name = "is_mandatory", nullable = false)
+  private Boolean isMandatory;
 }

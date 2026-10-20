@@ -1,6 +1,8 @@
 from concurrent import futures
+
 import grpc
 import structlog
+
 import document_pb2
 import document_pb2_grpc
 from ocr_engine import extract_text_from_bytes
@@ -10,7 +12,7 @@ structlog.configure(
     processors=[
         structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=False),
         structlog.processors.add_log_level,
-        structlog.dev.ConsoleRenderer()
+        structlog.dev.ConsoleRenderer(),
     ],
     wrapper_class=structlog.make_filtering_bound_logger(20),
     logger_factory=structlog.PrintLoggerFactory(),
@@ -34,8 +36,7 @@ class DocumentProcessorServicer(document_pb2_grpc.DocumentProcessorServicer):
         logger.debug("Распознанный текст", text=text)
         if not text:
             return document_pb2.ProccessResponse(
-                success=False,
-                errors=["Не удалось распознать текст (OCR вернул пустоту)"]
+                success=False, errors=["Не удалось распознать текст (OCR вернул пустоту)"]
             )
 
         parsed = parse_invoice_data(text)
@@ -56,17 +57,15 @@ class DocumentProcessorServicer(document_pb2_grpc.DocumentProcessorServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    document_pb2_grpc.add_DocumentProcessorServicer_to_server(
-        DocumentProcessorServicer(), server
-    )
+    document_pb2_grpc.add_DocumentProcessorServicer_to_server(DocumentProcessorServicer(), server)
 
-    port = '50051'
-    server.add_insecure_port(f'[::]:{port}')
+    port = "50051"
+    server.add_insecure_port(f"[::]:{port}")
 
     logger.info("gRPC сервер запущен", port=port)
     server.start()
     server.wait_for_termination()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     serve()

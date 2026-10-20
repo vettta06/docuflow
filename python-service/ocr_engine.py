@@ -1,9 +1,9 @@
+import io
+
 import fitz
 import pytesseract
-from PIL import Image
-import io
 import structlog
-
+from PIL import Image
 
 logger = structlog.get_logger()
 
