@@ -31,7 +31,7 @@ class DocumentProcessorServicer(document_pb2_grpc.DocumentProcessorServicer):
         )
 
         text = extract_text_from_bytes(request.file_content, request.file_name)
-        logger.info("Распознанный текст", text=text)
+        logger.debug("Распознанный текст", text=text)
         if not text:
             return document_pb2.ProccessResponse(
                 success=False,
