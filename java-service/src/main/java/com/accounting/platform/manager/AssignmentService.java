@@ -11,50 +11,55 @@ import com.accounting.platform.manager.dto.AssignRequest;
 import com.accounting.platform.repository.AccountantClientRepository;
 import com.accounting.platform.repository.OrganizationRepository;
 import com.accounting.platform.repository.UserRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class AssignmentService {
 
-    private final UserRepository userRepository;
-    private final OrganizationRepository organizationRepository;
-    private final AccountantClientRepository accountantClientRepository;
+  private final UserRepository userRepository;
+  private final OrganizationRepository organizationRepository;
+  private final AccountantClientRepository accountantClientRepository;
 
-    @Transactional
-    public void assign(AssignRequest request) {
-        User accountant = userRepository.findById(request.accountantId())
-                .orElseThrow(() -> new NotFoundException(
+  @Transactional
+  public void assign(AssignRequest request) {
+    User accountant =
+        userRepository
+            .findById(request.accountantId())
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
                         "Пользователь с id " + request.accountantId() + " не найден"));
 
-        if (accountant.getRole() != UserRole.ACCOUNTANT) {
-            throw new InvalidOperationException(
-                    "Пользователь с id " + accountant.getId() + " не является бухгалтером");
-        }
+    if (accountant.getRole() != UserRole.ACCOUNTANT) {
+      throw new InvalidOperationException(
+          "Пользователь с id " + accountant.getId() + " не является бухгалтером");
+    }
 
-        Organization org = organizationRepository.findById(request.organizationId())
-                .orElseThrow(() -> new NotFoundException(
+    Organization org =
+        organizationRepository
+            .findById(request.organizationId())
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
                         "Организация с id " + request.organizationId() + " не найдена"));
 
-        boolean alreadyAssigned = accountantClientRepository
-                .findByAccountantId(accountant.getId())
-                .stream()
-                .anyMatch(ac -> ac.getOrganization().getId().equals(org.getId()));
+    boolean alreadyAssigned =
+        accountantClientRepository.findByAccountantId(accountant.getId()).stream()
+            .anyMatch(ac -> ac.getOrganization().getId().equals(org.getId()));
 
-        if (alreadyAssigned) {
-            throw new AlreadyExistsException(
-                    "Бухгалтер уже назначен на организацию " + org.getName());
-        }
-
-        AccountantClient ac = new AccountantClient();
-        ac.setAccountant(accountant);
-        ac.setOrganization(org);
-        ac.setAssignedAt(LocalDateTime.now());
-
-        accountantClientRepository.save(ac);
+    if (alreadyAssigned) {
+      throw new AlreadyExistsException("Бухгалтер уже назначен на организацию " + org.getName());
     }
+
+    AccountantClient ac = new AccountantClient();
+    ac.setAccountant(accountant);
+    ac.setOrganization(org);
+    ac.setAssignedAt(LocalDateTime.now());
+
+    accountantClientRepository.save(ac);
+  }
 }

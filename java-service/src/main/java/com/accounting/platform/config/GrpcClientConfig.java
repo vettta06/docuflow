@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrpcClientConfig {
 
-    @Bean(destroyMethod = "shutdown")
-    public ManagedChannel pythonGrpcChannel() {
-        return ManagedChannelBuilder.forAddress("localhost", 50051)
-                .usePlaintext()
-                .build();
-    }
+  @Bean(destroyMethod = "shutdown")
+  public ManagedChannel pythonGrpcChannel() {
+    return ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+  }
 }

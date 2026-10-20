@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.8
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: spotless-java
+        name: Spotless Java Format
+        entry: cmd /c "cd java-service && mvnw.cmd spotless:apply"
+        language: system
+        files: \.java$
+        pass_filenames: false
