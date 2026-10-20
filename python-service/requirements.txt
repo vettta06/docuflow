@@ -1,3 +1,6 @@
 grpcio==1.84.0
 protobuf==7.35.1
-structlog
+structlog==24.1.0
+pytesseract==0.3.13
+Pillow==10.3.0
+PyMuPDF==1.24.5
