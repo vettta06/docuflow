@@ -3,10 +3,13 @@ package com.accounting.platform.document;
 import com.accounting.platform.common.InvalidOperationException;
 import com.accounting.platform.common.NotFoundException;
 import com.accounting.platform.document.dto.ChangeDocumentStatusRequest;
+import com.accounting.platform.document.dto.DocumentDetailsResponse;
 import com.accounting.platform.document.dto.DocumentResponse;
+import com.accounting.platform.document.dto.UpdateDocumentDataRequest;
 import com.accounting.platform.entity.AccountantClient;
 import com.accounting.platform.entity.Comment;
 import com.accounting.platform.entity.Document;
+import com.accounting.platform.entity.DocumentData;
 import com.accounting.platform.entity.DocumentStatus;
 import com.accounting.platform.entity.DocumentType;
 import com.accounting.platform.entity.Operation;
@@ -310,5 +313,56 @@ public class DocumentService {
     documentRepository.save(doc);
 
     return DocumentResponse.from(doc, findOperationId(doc));
+  }
+
+  @Transactional(readOnly = true)
+  public DocumentDetailsResponse getDetails(Long id) {
+    Document doc =
+        documentRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException("Документ с id " + id + " не найден"));
+
+    checkAccessToOrganization(doc.getOrganization().getId());
+    DocumentData data = documentDataRepository.findByDocumentId(id).orElse(null);
+
+    return DocumentDetailsResponse.from(doc, data);
+  }
+
+  @Transactional
+  public DocumentDetailsResponse updateDataAndConfirm(Long id, UpdateDocumentDataRequest request) {
+    Document doc =
+        documentRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException("Документ с id " + id + " не найден"));
+
+    checkAccessToOrganization(doc.getOrganization().getId());
+
+    CustomUserDetails current = SecurityUtils.requireCurrentUser();
+    if (current.getRole() == UserRole.ACCOUNTANT) {
+      throw new InvalidOperationException("Бухгалтер не может редактировать распознанные данные");
+    }
+
+    DocumentData data = documentDataRepository.findByDocumentId(id).orElse(new DocumentData());
+    if (data.getId() == null) {
+      data.setDocument(doc);
+      data.setCreatedAt(LocalDateTime.now());
+    }
+
+    data.setNumber(request.number());
+    data.setDate(request.date());
+    data.setSellerInn(request.sellerInn());
+    data.setSellerName(request.sellerName());
+    data.setBuyerInn(request.buyerInn());
+    data.setBuyerName(request.buyerName());
+    data.setAmount(request.amount());
+    data.setVat(request.vat());
+
+    documentDataRepository.save(data);
+
+    doc.setStatus(DocumentStatus.CONFIRMED);
+    doc.setUpdatedAt(LocalDateTime.now());
+    documentRepository.save(doc);
+
+    return DocumentDetailsResponse.from(doc, data);
   }
 }
