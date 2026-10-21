@@ -1,7 +1,9 @@
 package com.accounting.platform.document;
 
 import com.accounting.platform.document.dto.ChangeDocumentStatusRequest;
+import com.accounting.platform.document.dto.DocumentDetailsResponse;
 import com.accounting.platform.document.dto.DocumentResponse;
+import com.accounting.platform.document.dto.UpdateDocumentDataRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,5 +67,16 @@ public class DocumentController {
   public ResponseEntity<DocumentResponse> changeStatus(
       @PathVariable Long id, @Valid @RequestBody ChangeDocumentStatusRequest request) {
     return ResponseEntity.ok(documentService.changeStatus(id, request));
+  }
+
+  @GetMapping("/{id}/details")
+  public ResponseEntity<DocumentDetailsResponse> getDetails(@PathVariable Long id) {
+    return ResponseEntity.ok(documentService.getDetails(id));
+  }
+
+  @PutMapping("/{id}/confirm")
+  public ResponseEntity<DocumentDetailsResponse> updateAndConfirm(
+      @PathVariable Long id, @Valid @RequestBody UpdateDocumentDataRequest request) {
+    return ResponseEntity.ok(documentService.updateDataAndConfirm(id, request));
   }
 }
