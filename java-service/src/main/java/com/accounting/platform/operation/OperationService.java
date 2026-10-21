@@ -213,4 +213,26 @@ public class OperationService {
       case MANAGER -> {}
     }
   }
+
+  @Transactional
+  public void recalculateCompleteness(Operation op) {
+    List<RequiredDocumentStatus> required = buildRequiredStatuses(op);
+    boolean allProvided =
+        required.stream()
+            .filter(RequiredDocumentStatus::mandatory)
+            .allMatch(RequiredDocumentStatus::provided);
+    CompletenessStatus newCompleteness =
+        allProvided ? CompletenessStatus.COMPLETE : CompletenessStatus.INCOMPLETE;
+    OperationStatus newStatus = op.getStatus();
+    if (op.getStatus() != OperationStatus.ACCEPTED) {
+      if (allProvided) {
+        newStatus = OperationStatus.READY;
+      } else {
+        newStatus = OperationStatus.WAITING_CLIENT;
+      }
+    }
+    op.setCompletenessStatus(newCompleteness);
+    op.setStatus(newStatus);
+    operationRepository.save(op);
+  }
 }

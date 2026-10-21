@@ -51,6 +51,7 @@ public class DocumentService {
   private final CommentRepository commentRepository;
   private final DocumentProcessorClient documentProcessorClient;
   private final com.accounting.platform.repository.DocumentDataRepository documentDataRepository;
+  private final com.accounting.platform.operation.OperationService operationService;
 
   private static final Map<DocumentStatus, Set<DocumentStatus>> ALLOWED_TRANSITIONS =
       Map.of(
@@ -362,6 +363,10 @@ public class DocumentService {
     doc.setStatus(DocumentStatus.CONFIRMED);
     doc.setUpdatedAt(LocalDateTime.now());
     documentRepository.save(doc);
+
+    operationDocumentRepository.findByDocumentId(doc.getId()).stream()
+        .findFirst()
+        .ifPresent(link -> operationService.recalculateCompleteness(link.getOperation()));
 
     return DocumentDetailsResponse.from(doc, data);
   }
