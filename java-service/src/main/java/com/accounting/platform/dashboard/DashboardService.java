@@ -2,6 +2,7 @@ package com.accounting.platform.dashboard;
 
 import com.accounting.platform.dashboard.dto.QueueResponse;
 import com.accounting.platform.dashboard.dto.QueueStats;
+import com.accounting.platform.document.dto.DocumentFilter;
 import com.accounting.platform.document.dto.DocumentResponse;
 import com.accounting.platform.entity.Document;
 import com.accounting.platform.entity.DocumentStatus;
@@ -25,7 +26,7 @@ public class DashboardService {
   private final AccountantClientRepository accountantClientRepository;
 
   @Transactional(readOnly = true)
-  public QueueResponse getAccountantQueue() {
+  public QueueResponse getAccountantQueueFiltered(DocumentFilter filter) {
     CustomUserDetails current = SecurityUtils.requireCurrentUser();
 
     List<Document> documents;
@@ -41,6 +42,35 @@ public class DashboardService {
       throw new IllegalStateException("Доступ только для бухгалтеров и менеджеров");
     }
 
+    if (filter != null) {
+      documents =
+          documents.stream()
+              .filter(
+                  d ->
+                      filter.organizationId() == null
+                          || d.getOrganization().getId().equals(filter.organizationId()))
+              .filter(
+                  d ->
+                      filter.documentType() == null
+                          || d.getDocumentType().name().equals(filter.documentType()))
+              .filter(d -> filter.status() == null || d.getStatus().name().equals(filter.status()))
+              .filter(
+                  d ->
+                      filter.fileName() == null
+                          || d.getFileName()
+                              .toLowerCase()
+                              .contains(filter.fileName().toLowerCase()))
+              .filter(
+                  d ->
+                      filter.dateFrom() == null
+                          || !d.getCreatedAt().toLocalDate().isBefore(filter.dateFrom()))
+              .filter(
+                  d ->
+                      filter.dateTo() == null
+                          || !d.getCreatedAt().toLocalDate().isAfter(filter.dateTo()))
+              .toList();
+    }
+
     long newDocs = documents.stream().filter(d -> d.getStatus() == DocumentStatus.UPLOADED).count();
     long needsReview =
         documents.stream().filter(d -> d.getStatus() == DocumentStatus.NEEDS_REVIEW).count();
@@ -52,9 +82,7 @@ public class DashboardService {
     QueueStats stats = new QueueStats(newDocs, needsReview, waitingClient, confirmed);
 
     List<DocumentResponse> docResponses =
-        documents.stream()
-            .map(doc -> DocumentResponse.from(doc, null)) // operationId пока null для простоты
-            .toList();
+        documents.stream().map(doc -> DocumentResponse.from(doc, null)).toList();
 
     return new QueueResponse(stats, docResponses);
   }
