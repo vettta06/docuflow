@@ -52,6 +52,7 @@ public class DocumentService {
   private final DocumentProcessorClient documentProcessorClient;
   private final com.accounting.platform.repository.DocumentDataRepository documentDataRepository;
   private final com.accounting.platform.operation.OperationService operationService;
+  private final com.accounting.platform.audit.AuditLogService auditLogService;
 
   private static final Map<DocumentStatus, Set<DocumentStatus>> ALLOWED_TRANSITIONS =
       Map.of(
@@ -93,6 +94,8 @@ public class DocumentService {
       doc.setUpdatedAt(LocalDateTime.now());
 
       Document saved = documentRepository.save(doc);
+      auditLogService.log(
+          "DOCUMENT", saved.getId(), "UPLOAD", "Загружен документ: " + saved.getFileName());
 
       OperationDocument link = new OperationDocument();
       link.setOperation(operation);
@@ -361,6 +364,11 @@ public class DocumentService {
     documentDataRepository.save(data);
 
     doc.setStatus(DocumentStatus.CONFIRMED);
+    auditLogService.log(
+        "DOCUMENT",
+        doc.getId(),
+        "CONFIRM",
+        "Клиент подтвердил данные документа: " + doc.getFileName());
     doc.setUpdatedAt(LocalDateTime.now());
     documentRepository.save(doc);
 
