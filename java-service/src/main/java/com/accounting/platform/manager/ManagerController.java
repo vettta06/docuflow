@@ -1,5 +1,7 @@
 package com.accounting.platform.manager;
 
+import com.accounting.platform.dashboard.ManagerDashboardService;
+import com.accounting.platform.dashboard.dto.ManagerDashboardResponse;
 import com.accounting.platform.manager.dto.AccountantResponse;
 import com.accounting.platform.manager.dto.AssignRequest;
 import com.accounting.platform.manager.dto.ClientResponse;
@@ -28,6 +30,7 @@ public class ManagerController {
   private final AccountantService accountantService;
   private final ClientService clientService;
   private final AssignmentService assignmentService;
+  private final ManagerDashboardService managerDashboardService;
 
   @PostMapping("/organizations")
   public ResponseEntity<OrganizationResponse> createOrganization(
@@ -65,5 +68,10 @@ public class ManagerController {
     assignmentService.assign(request);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(Map.of("message", "Бухгалтер успешно назначен на организацию"));
+  }
+
+  @GetMapping("/dashboard")
+  public ResponseEntity<ManagerDashboardResponse> getDashboard() {
+    return ResponseEntity.ok(managerDashboardService.getDashboard());
   }
 }
