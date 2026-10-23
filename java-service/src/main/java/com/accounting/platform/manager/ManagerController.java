@@ -1,5 +1,7 @@
 package com.accounting.platform.manager;
 
+import com.accounting.platform.audit.AuditLogService;
+import com.accounting.platform.audit.dto.AuditLogResponse;
 import com.accounting.platform.dashboard.ManagerDashboardService;
 import com.accounting.platform.dashboard.dto.ManagerDashboardResponse;
 import com.accounting.platform.manager.dto.AccountantResponse;
@@ -9,6 +11,7 @@ import com.accounting.platform.manager.dto.CreateAccountantRequest;
 import com.accounting.platform.manager.dto.CreateClientRequest;
 import com.accounting.platform.manager.dto.CreateOrganizationRequest;
 import com.accounting.platform.manager.dto.OrganizationResponse;
+import com.accounting.platform.repository.AuditLogRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,8 @@ public class ManagerController {
   private final ClientService clientService;
   private final AssignmentService assignmentService;
   private final ManagerDashboardService managerDashboardService;
+  private final AuditLogRepository auditLogRepository;
+  private final AuditLogService auditLogService;
 
   @PostMapping("/organizations")
   public ResponseEntity<OrganizationResponse> createOrganization(
@@ -73,5 +78,10 @@ public class ManagerController {
   @GetMapping("/dashboard")
   public ResponseEntity<ManagerDashboardResponse> getDashboard() {
     return ResponseEntity.ok(managerDashboardService.getDashboard());
+  }
+
+  @GetMapping("/audit")
+  public ResponseEntity<List<AuditLogResponse>> getAuditLog() {
+    return ResponseEntity.ok(auditLogService.getAllLogs());
   }
 }
