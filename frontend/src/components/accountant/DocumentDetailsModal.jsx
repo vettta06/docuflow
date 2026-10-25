@@ -5,14 +5,15 @@ import { extractErrorMessage } from "../../api/auth";
 export default function DocumentDetailsModal({ doc, onClose, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [comment, setComment] = useState("");
 
-  const changeStatus = async (newStatus, comment = null) => {
+  const changeStatus = async (newStatus) => {
     setLoading(true);
     setError("");
     try {
       await api.patch(`/documents/${doc.id}/status`, {
         status: newStatus,
-        comment,
+        comment: comment || null,
       });
       onUpdate();
       onClose();
@@ -69,6 +70,27 @@ export default function DocumentDetailsModal({ doc, onClose, onUpdate }) {
           <strong>Размер:</strong> {doc.fileSize} байт
         </p>
 
+        {/* Поле для комментария */}
+        <div style={{ marginTop: "16px" }}>
+          <label
+            style={{ display: "block", marginBottom: "4px", fontSize: "14px" }}
+          >
+            Комментарий (для клиента):
+          </label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Например: Неверно указан ИНН, исправьте..."
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "6px",
+              border: "1px solid #d1d5db",
+              minHeight: "60px",
+            }}
+          />
+        </div>
+
         <div
           style={{
             display: "flex",
@@ -106,12 +128,7 @@ export default function DocumentDetailsModal({ doc, onClose, onUpdate }) {
                 Подтвердить
               </button>
               <button
-                onClick={() =>
-                  changeStatus(
-                    "NEEDS_REVIEW",
-                    "Отправлено на доработку клиентом",
-                  )
-                }
+                onClick={() => changeStatus("NEEDS_REVIEW")}
                 disabled={loading}
                 style={{
                   background: "#d97706",

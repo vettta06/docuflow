@@ -3,26 +3,34 @@ import api from "../api/axios";
 import Loader from "../components/Loader";
 import CreateOperationForm from "../components/client/CreateOperationForm";
 import UploadDocumentForm from "../components/client/UploadDocumentForm";
+import DocumentOcrModal from "../components/client/DocumentOcrModal";
 
 export default function ClientPage() {
   const [operations, setOperations] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [documents, setDocuments] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [expandedOpId, setExpandedOpId] = useState(null);
   const [uploadingForOpId, setUploadingForOpId] = useState(null);
+  const [uploadingForTaskId, setUploadingForTaskId] = useState(null);
+
+  const [selectedDoc, setSelectedDoc] = useState(null); // Для модалки OCR
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [opsRes, tasksRes] = await Promise.all([
+      const [opsRes, tasksRes, docsRes] = await Promise.all([
         api.get("/operations"),
         api.get("/tasks"),
+        api.get("/documents"),
       ]);
       setOperations(opsRes.data);
       setTasks(tasksRes.data);
+      setDocuments(docsRes.data);
     } catch (err) {
       setError(err.response?.data?.message || "Ошибка загрузки данных");
     } finally {
@@ -41,11 +49,25 @@ export default function ClientPage() {
 
   const handleDocumentUploaded = () => {
     setUploadingForOpId(null);
+    setUploadingForTaskId(null);
     fetchData();
   };
 
   if (loading && operations.length === 0) return <Loader />;
   if (error) return <div className="auth-error">{error}</div>;
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "NEW":
+        return { bg: "#e0f2fe", color: "#0369a1" };
+      case "READY":
+        return { bg: "#dcfce7", color: "#166534" };
+      case "WAITING_CLIENT":
+        return { bg: "#ffedd5", color: "#9a3412" };
+      default:
+        return { bg: "#e5e7eb", color: "#374151" };
+    }
+  };
 
   return (
     <div>
@@ -86,88 +108,152 @@ export default function ClientPage() {
           <p>Операций пока нет.</p>
         ) : (
           <ul className="list" style={{ marginTop: "16px" }}>
-            {operations.map((op) => (
-              <li
-                key={op.id}
-                style={{ padding: "12px 0", borderBottom: "1px solid #eef0f2" }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                  }}
-                  onClick={() =>
-                    setExpandedOpId(expandedOpId === op.id ? null : op.id)
-                  }
-                >
-                  <div>
-                    <strong>{op.title}</strong> ({op.type?.name}) <br />
-                    <small style={{ color: "#6b7280" }}>
-                      Дата: {op.operationDate} | Статус: {op.status}
-                    </small>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ fontWeight: "bold" }}>{op.totalAmount} ₽</div>
-                    <small style={{ color: "#2563eb" }}>
-                      {expandedOpId === op.id ? "Скрыть" : "Подробнее"}
-                    </small>
-                  </div>
-                </div>
+            {operations.map((op) => {
+              const opDocs = documents.filter((d) => d.operationId === op.id);
+              const statusStyle = getStatusColor(op.status);
 
-                {expandedOpId === op.id && (
+              return (
+                <li
+                  key={op.id}
+                  style={{
+                    padding: "12px 0",
+                    borderBottom: "1px solid #eef0f2",
+                  }}
+                >
                   <div
                     style={{
-                      marginTop: "12px",
-                      padding: "12px",
-                      background: "#f9fafb",
-                      borderRadius: "6px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      cursor: "pointer",
                     }}
+                    onClick={() =>
+                      setExpandedOpId(expandedOpId === op.id ? null : op.id)
+                    }
                   >
-                    <h4 style={{ margin: "0 0 8px 0" }}>
-                      Комплектность документов:
-                    </h4>
-                    <ul style={{ paddingLeft: "20px", fontSize: "14px" }}>
-                      {op.requiredDocuments?.map((doc, idx) => (
-                        <li
-                          key={idx}
-                          style={{
-                            color: doc.provided ? "#166534" : "#991b1b",
-                          }}
-                        >
-                          {doc.documentType}{" "}
-                          {doc.mandatory ? "(обязательный)" : "(опциональный)"}{" "}
-                          — {doc.provided ? "✓ Загружен" : "✗ Отсутствует"}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {uploadingForOpId === op.id ? (
-                      <UploadDocumentForm
-                        operationId={op.id}
-                        onUploaded={handleDocumentUploaded}
-                        onCancel={() => setUploadingForOpId(null)}
-                      />
-                    ) : (
-                      <button
-                        onClick={() => setUploadingForOpId(op.id)}
+                    <div>
+                      <strong>{op.title}</strong> ({op.type?.name}) <br />
+                      <small style={{ color: "#6b7280", marginRight: "10px" }}>
+                        Дата: {op.operationDate || "—"}
+                      </small>
+                      <span
                         style={{
-                          marginTop: "10px",
-                          background: "#059669",
-                          color: "#fff",
-                          border: "none",
-                          padding: "6px 12px",
+                          padding: "2px 8px",
                           borderRadius: "4px",
-                          fontSize: "12px",
+                          fontSize: "11px",
+                          fontWeight: "bold",
+                          background: statusStyle.bg,
+                          color: statusStyle.color,
                         }}
                       >
-                        Прикрепить документ
-                      </button>
-                    )}
+                        {op.status}
+                      </span>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontWeight: "bold" }}>
+                        {op.totalAmount} ₽
+                      </div>
+                      <small style={{ color: "#2563eb" }}>
+                        {expandedOpId === op.id ? "Скрыть" : "Подробнее"}
+                      </small>
+                    </div>
                   </div>
-                )}
-              </li>
-            ))}
+
+                  {expandedOpId === op.id && (
+                    <div
+                      style={{
+                        marginTop: "12px",
+                        padding: "12px",
+                        background: "#f9fafb",
+                        borderRadius: "6px",
+                      }}
+                    >
+                      <h4 style={{ margin: "0 0 8px 0" }}>
+                        Комплектность документов:
+                      </h4>
+                      <ul style={{ paddingLeft: "20px", fontSize: "14px" }}>
+                        {op.requiredDocuments?.map((doc, idx) => (
+                          <li
+                            key={idx}
+                            style={{
+                              color: doc.provided ? "#166534" : "#991b1b",
+                            }}
+                          >
+                            {doc.documentType}{" "}
+                            {doc.mandatory
+                              ? "(обязательный)"
+                              : "(опциональный)"}{" "}
+                            — {doc.provided ? "✓ Загружен" : "✗ Отсутствует"}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Вывод загруженных документов для OCR */}
+                      {opDocs.length > 0 && (
+                        <div style={{ marginTop: "16px" }}>
+                          <h4 style={{ margin: "0 0 8px 0" }}>
+                            Загруженные файлы:
+                          </h4>
+                          <ul className="list">
+                            {opDocs.map((doc) => (
+                              <li
+                                key={doc.id}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  padding: "8px 0",
+                                  fontSize: "14px",
+                                  borderBottom: "1px solid #e5e7eb",
+                                }}
+                              >
+                                <span>
+                                  {doc.fileName} ({doc.status})
+                                </span>
+                                <button
+                                  onClick={() => setSelectedDoc(doc)}
+                                  style={{
+                                    background: "#2563eb",
+                                    color: "#fff",
+                                    border: "none",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  Проверить данные OCR
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {uploadingForOpId === op.id ? (
+                        <UploadDocumentForm
+                          operationId={op.id}
+                          onUploaded={handleDocumentUploaded}
+                          onCancel={() => setUploadingForOpId(null)}
+                        />
+                      ) : (
+                        <button
+                          onClick={() => setUploadingForOpId(op.id)}
+                          style={{
+                            marginTop: "16px",
+                            background: "#059669",
+                            color: "#fff",
+                            border: "none",
+                            padding: "6px 12px",
+                            borderRadius: "4px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Прикрепить документ
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
@@ -179,19 +265,68 @@ export default function ClientPage() {
         ) : (
           <ul className="list">
             {tasks.map((task) => (
-              <li key={task.id} style={{ padding: "12px 0" }}>
-                <strong>{task.documentType}</strong>
-                <div style={{ fontSize: "14px", marginTop: "4px" }}>
-                  {task.comment || "Без комментария"}
+              <li
+                key={task.id}
+                style={{ padding: "12px 0", borderBottom: "1px solid #eef0f2" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <strong>{task.documentType}</strong>
+                    <div style={{ fontSize: "14px", marginTop: "4px" }}>
+                      {task.comment || "Без комментария"}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: "12px", color: "#6b7280" }}>
+                    {task.status}
+                  </span>
                 </div>
-                <small style={{ color: "#6b7280" }}>
-                  Статус: {task.status}
-                </small>
+
+                {task.status === "OPEN" && (
+                  <div style={{ marginTop: "10px" }}>
+                    {uploadingForTaskId === task.id ? (
+                      <UploadDocumentForm
+                        operationId={task.operationId}
+                        defaultDocumentType={task.documentType}
+                        onUploaded={handleDocumentUploaded}
+                        onCancel={() => setUploadingForTaskId(null)}
+                      />
+                    ) : (
+                      <button
+                        onClick={() => setUploadingForTaskId(task.id)}
+                        style={{
+                          background: "#2563eb",
+                          color: "#fff",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        Загрузить документ по задаче
+                      </button>
+                    )}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      {selectedDoc && (
+        <DocumentOcrModal
+          documentId={selectedDoc.id}
+          fileName={selectedDoc.fileName}
+          onClose={() => setSelectedDoc(null)}
+          onUpdated={fetchData}
+        />
+      )}
     </div>
   );
 }
