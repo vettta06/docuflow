@@ -10,6 +10,9 @@ public class GrpcClientConfig {
 
   @Bean(destroyMethod = "shutdown")
   public ManagedChannel pythonGrpcChannel() {
-    return ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+    String host = System.getenv().getOrDefault("PYTHON_SERVICE_HOST", "localhost");
+    int port = Integer.parseInt(System.getenv().getOrDefault("PYTHON_SERVICE_PORT", "50051"));
+
+    return ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
   }
 }
