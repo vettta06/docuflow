@@ -28,11 +28,47 @@ services:
       - "9001:9001"
     volumes:
       - miniodata:/data
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+
+  java-service:
+    build:
+      context: .
+      dockerfile: java-service/Dockerfile
+    container_name: accounting-java
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET=documents
+      - JWT_SECRET=${JWT_SECRET}
+      - PYTHON_SERVICE_HOST=python-service
+      - PYTHON_SERVICE_PORT=50051
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+  python-service:
+    build:
+      context: .
+      dockerfile: python-service/Dockerfile
+    container_name: accounting-python
+    ports:
+      - "50051:50051"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: accounting-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - java-service
 
 volumes:
   pgdata:
