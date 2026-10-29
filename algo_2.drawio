@@ -1,0 +1,186 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram name="Страница-1" id="93ETNQBdzgUvVxyjJo6U">
+    <mxGraphModel dx="3000" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4JpiubcSRLZz0YizsCrW-70" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-38" target="4JpiubcSRLZz0YizsCrW-39" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Начало" mermaidId="n:A" mermaidBaseStyle="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#f9f9f9;strokeColor=#333;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Начало" id="4JpiubcSRLZz0YizsCrW-38">
+          <mxCell style="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#f9f9f9;strokeColor=#333;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="312.5" y="30" width="85" height="30" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-39" target="4JpiubcSRLZz0YizsCrW-40" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Получение списка бухгалтеров и закреплённых за ними организаций" mermaidId="n:B" mermaidBaseStyle="html=1;shape=parallelogram;perimeter=parallelogramPerimeter;fixedSize=1;size=38.75;strokeWidth=2;whiteSpace=wrap;fillColor=#e8f5e9;strokeColor=#388e3c;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Ввод: список бухгалтеров и их организаций" id="4JpiubcSRLZz0YizsCrW-39">
+          <mxCell style="html=1;shape=parallelogram;perimeter=parallelogramPerimeter;fixedSize=1;size=38.75;strokeWidth=2;whiteSpace=wrap;fillColor=#e8f5e9;strokeColor=#388e3c;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="260" y="90" width="200" height="65" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="ofykDhUjEOBJzIy205IQ-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="4JpiubcSRLZz0YizsCrW-40" target="ofykDhUjEOBJzIy205IQ-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Инициализация минимальной нагрузки значением +∞" mermaidId="n:C" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Выбор первого бухгалтера&#xa;как текущего кандидата" id="4JpiubcSRLZz0YizsCrW-40">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="295.75" y="190" width="118.5" height="77" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-76" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-42" target="4JpiubcSRLZz0YizsCrW-43" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-77" value="Да" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-76" connectable="0" vertex="1">
+          <mxGeometry x="-0.5152" y="-4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Остались непроверенные бухгалтеры?" mermaidId="n:E" mermaidBaseStyle="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Есть непроверенные&#xa;бухгалтеры?" id="4JpiubcSRLZz0YizsCrW-42">
+          <mxCell style="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="288.37" y="400" width="135.25" height="110" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-43" target="4JpiubcSRLZz0YizsCrW-44" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Выбор следующего бухгалтера" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Выбор очередного бухгалтера" id="4JpiubcSRLZz0YizsCrW-43">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="291.19000000000005" y="550" width="129.62" height="65" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-44" target="4JpiubcSRLZz0YizsCrW-45" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Инициализация счётчика организаций значением 0" mermaidId="n:G" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Счетчик организаций = 0" id="4JpiubcSRLZz0YizsCrW-44">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="288.37" y="650" width="135.25" height="65" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-45" target="4JpiubcSRLZz0YizsCrW-46" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Переход к первой организации, закреплённой за бухгалтером" mermaidId="n:H" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Переход к первой организации&#xa;текущего бухгалтера" id="4JpiubcSRLZz0YizsCrW-45">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="285.09000000000003" y="760" width="141.81" height="78" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-46" target="4JpiubcSRLZz0YizsCrW-49" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-83" value="Нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-82" connectable="0" vertex="1">
+          <mxGeometry x="-0.6547" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-86" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-46" target="4JpiubcSRLZz0YizsCrW-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-87" value="Да" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-86" connectable="0" vertex="1">
+          <mxGeometry x="-0.1311" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Остались непроверенные организации?" mermaidId="n:I" mermaidBaseStyle="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Есть непроверенные&#xa;организации?" id="4JpiubcSRLZz0YizsCrW-46">
+          <mxCell style="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="295.75" y="870" width="135.25" height="123" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-47" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="361.8512396694214" y="1140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Увеличение счётчика организаций на 1" mermaidId="n:J" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Счетчик организаций = Счетчик + 1" id="4JpiubcSRLZz0YizsCrW-47">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="297.28" y="1025" width="129.62" height="87" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-48" target="4JpiubcSRLZz0YizsCrW-46" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="1187.5" />
+              <mxPoint x="260" y="931.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Переход к следующей организации" mermaidId="n:K" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Переход к следующей организации" id="4JpiubcSRLZz0YizsCrW-48">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="297.28" y="1144" width="129.62" height="87" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-84" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-49" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="580.7106611570248" y="1157" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-85" value="Да" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-84" connectable="0" vertex="1">
+          <mxGeometry x="-0.3099" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-49" target="4JpiubcSRLZz0YizsCrW-42" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="1046" />
+              <mxPoint x="700" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-94" value="Нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-93" connectable="0" vertex="1">
+          <mxGeometry x="-0.977" y="1" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Нагрузка бухгалтера меньше минимальной нагрузки?" mermaidId="n:L" mermaidBaseStyle="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Счетчик организаций &lt;&#xa;нагрузка текущего кандидата?" id="4JpiubcSRLZz0YizsCrW-49">
+          <mxCell style="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="490" y="970" width="171" height="152" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-92" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="4JpiubcSRLZz0YizsCrW-50" target="4JpiubcSRLZz0YizsCrW-42" edge="1">
+          <mxGeometry x="-0.0744" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="1189.5" />
+              <mxPoint x="700" y="455" />
+            </Array>
+            <mxPoint x="430" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Обновление минимальной нагрузки и текущего кандидата" mermaidId="n:M" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Текущий кандидат =&#xa;рассматриваемый бухгалтер" id="4JpiubcSRLZz0YizsCrW-50">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="519.75" y="1157" width="121.5" height="65" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-51" target="4JpiubcSRLZz0YizsCrW-52" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Вывод: текущий кандидат&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" mermaidId="n:N" mermaidBaseStyle="html=1;shape=parallelogram;perimeter=parallelogramPerimeter;fixedSize=1;size=38.75;strokeWidth=2;whiteSpace=wrap;fillColor=#e8f5e9;strokeColor=#388e3c;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Вывод: текущий кандидат&#xa;(бухгалтер с мин. нагрузкой)" id="4JpiubcSRLZz0YizsCrW-51">
+          <mxCell style="html=1;shape=parallelogram;perimeter=parallelogramPerimeter;fixedSize=1;size=38.75;strokeWidth=2;whiteSpace=wrap;fillColor=#e8f5e9;strokeColor=#388e3c;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="100" y="490" width="166" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Конец" mermaidId="n:O" mermaidBaseStyle="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#f9f9f9;strokeColor=#333;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Конец" id="4JpiubcSRLZz0YizsCrW-52">
+          <mxCell style="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#f9f9f9;strokeColor=#333;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" parent="1" vertex="1">
+            <mxGeometry x="137.5" y="568.5" width="91" height="28" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.532;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=page;" parent="1" source="4JpiubcSRLZz0YizsCrW-42" target="4JpiubcSRLZz0YizsCrW-51" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4JpiubcSRLZz0YizsCrW-78" value="Нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" parent="4JpiubcSRLZz0YizsCrW-74" connectable="0" vertex="1">
+          <mxGeometry x="-0.6327" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ofykDhUjEOBJzIy205IQ-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ofykDhUjEOBJzIy205IQ-3" target="4JpiubcSRLZz0YizsCrW-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Инициализация текущего кандидата пустым значением" mermaidId="n:C" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Выбор первого бухгалтера&#xa;как текущего кандидата" id="ofykDhUjEOBJzIy205IQ-3">
+          <mxCell style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e1f5fe;strokeColor=#0288d1;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1" parent="1">
+            <mxGeometry x="297.28" y="300" width="118.5" height="77" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

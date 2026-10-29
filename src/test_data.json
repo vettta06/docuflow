@@ -1,0 +1,57 @@
+{
+  "organizations": [
+    {
+      "id": 1,
+      "name": "ООО Ромашка",
+      "inn": "7701000001"
+    },
+    {
+      "id": 2,
+      "name": "ООО Василёк",
+      "inn": "7701000002"
+    },
+    {
+      "id": 3,
+      "name": "ООО Ландыш",
+      "inn": "7701000003"
+    }
+  ],
+  "accountants": [
+    {
+      "id": 10,
+      "role": "ACCOUNTANT",
+      "full_name": "Анна Смирнова"
+    },
+    {
+      "id": 11,
+      "role": "ACCOUNTANT",
+      "full_name": "Иван Петров"
+    }
+  ],
+  "accountant_clients": [
+    {
+      "id": 1,
+      "accountant_id": 10,
+      "organization_id": 1
+    },
+    {
+      "id": 2,
+      "accountant_id": 10,
+      "organization_id": 2
+    },
+    {
+      "id": 3,
+      "accountant_id": 11,
+      "organization_id": 3
+    }
+  ],
+  "required_documents": ["счёт", "акт"],
+  "uploaded_documents": [
+    {
+      "id": 101,
+      "document_type": "счёт",
+      "file_name": "invoice.pdf"
+    }
+  ],
+  "sample_document_text": "Счёт № 15 от 20.10.2026. Сумма: 12500.00"
+}
