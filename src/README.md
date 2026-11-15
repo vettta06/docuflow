@@ -5,27 +5,62 @@
 
 ## Структура
 
-- algorithm_completeness.py — проверка комплектности документов.
-- algorithm_accountant.py — выбор бухгалтера с минимальной нагрузкой,
-  определение типа документа и извлечение реквизитов из текста.
-- test_data.json — тестовые данные для обоих файлов.
+- `algorithm_completeness.py` - проверка комплектности документов.
+- `algorithm_accountant.py` - расчёт нагрузки и выбор бухгалтера с минимальной нагрузкой.
+- `algorithm_determine_type.py` - определение типа документа по распознанному OCR-тексту.
+- `algorithm_extract_data.py` - извлечение реквизитов документа из распознанного OCR-текста.
+- `test_data.json` - тестовые данные для алгоритмов.
 
 ## Запуск
 
 Проверка комплектности документов:
 
-    python algorithm_completeness.py
+```bash
+python algorithm_completeness.py
+```
 
-Выбор бухгалтера и демонстрация обработки текста документа:
+Выбор бухгалтера:
 
-    python algorithm_accountant.py
+```bash
+python algorithm_accountant.py
+```
+
+Определение типа документа:
+
+```bash
+python algorithm_determine_type.py
+```
+
+Извлечение реквизитов документа:
+
+```bash
+python algorithm_extract_data.py
+```
 
 ## Пример ожидаемого результата
 
-Для algorithm_completeness.py:
+Для `algorithm_completeness.py`:
 
-    Отсутствующие документы: ['акт']
+```text
+Missing documents: ['акт']
+```
 
-Для algorithm_accountant.py:
+Для `algorithm_accountant.py`:
 
-    Accountant with the smallest workload: Иван Петров
+```text
+Accountant with the smallest workload: Иван Петров
+```
+
+Для `algorithm_determine_type.py`:
+
+```text
+Счёт № 15: INVOICE
+```
+
+Для `algorithm_extract_data.py`:
+
+```text
+document_number: 15
+document_date: 20.10.2026
+amount: 12500.00
+```
