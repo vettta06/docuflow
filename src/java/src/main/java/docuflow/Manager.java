@@ -3,6 +3,7 @@ package docuflow;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Manager extends User {
 
@@ -29,7 +30,7 @@ public class Manager extends User {
         return loads;
     }
 
-    public Accountant chooseAccountant(
+    public Optional<Accountant> chooseAccountant(
             List<Accountant> accountants,
             List<AccountantClient> relations
     ) {
@@ -48,6 +49,6 @@ public class Manager extends User {
             }
         }
 
-        return candidate;
+        return Optional.ofNullable(candidate);
     }
 }

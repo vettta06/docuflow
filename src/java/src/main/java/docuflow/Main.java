@@ -8,6 +8,7 @@ import docuflow.document.SetBasedDocumentCompleteness;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
 
@@ -72,12 +73,12 @@ public class Main {
 
         Manager manager = new Manager(0, "Менеджер");
 
-        Accountant selectedAccountant =
+        Optional<Accountant> selectedAccountant =
                 manager.chooseAccountant(accountants, relations);
 
-        String accountantName = selectedAccountant == null
-                ? "None"
-                : selectedAccountant.getFullName();
+        String accountantName = selectedAccountant
+                .map(Accountant::getFullName)
+                .orElse("None");
 
         System.out.println(
                 "Accountant with the smallest workload: " + accountantName
